@@ -108,6 +108,11 @@ main > .section:first-child {
   padding-top: calc(var(--section-pad) + 12px);
 }
 
+/* ========== Scroll rhythm: avoid double-spacing between sections ========== */
+.section + .section {
+  padding-top: 0; /* only keep the previous section's bottom padding */
+}
+
 /* ========== Typography roles ========== */
 .eyebrow {
   margin: 0 0 var(--space-2);
@@ -253,6 +258,14 @@ main > .section:first-child {
   transform: scaleX(0.8);
   transition: opacity 160ms ease, transform 160ms ease;
 }
+
+/* ========== Nav polish: active state should feel immediate ========== */
+.site-header a.is-active::after {
+  transition: none; /* no animation on load for the active page */
+  opacity: 0.9;
+  transform: scaleX(1);
+}
+
 
 /* hover + keyboard focus */
 .site-header a:hover::after,
