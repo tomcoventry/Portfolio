@@ -8,14 +8,6 @@
   --muted: rgba(245, 247, 255, 0.72);
   --surface: rgba(255, 255, 255, 0.06);
 
-  /* Header */
-  --header-h: 64px;
-  --header-bg: rgba(11, 12, 16, 0.72);
-  --header-border: rgba(245, 247, 255, 0.10);
-  --header-gutter: var(--gutter);
-
-
-
   /* Layout */
   --container-max: 1200px;
   --gutter: clamp(16px, 4vw, 40px);
@@ -26,8 +18,13 @@
   --gap: clamp(12px, 2vw, 24px);
 
   /* Cover grid spacing (component tokens) */
-  --cover-col-gap: 48px;                 /* desktop default */
+  --cover-col-gap: 48px;
   --cover-row-gap: clamp(14px, 2.2vw, 26px);
+
+  /* Header */
+  --header-h: 64px;
+  --header-bg: rgba(11, 12, 16, 0.72);
+  --header-border: rgba(245, 247, 255, 0.10);
 
   /* Radius */
   --radius: 14px;
@@ -61,6 +58,14 @@
 
   /* Section rhythm */
   --section-pad: clamp(40px, 6vw, 80px);
+
+  /* Underline system */
+  --underline-offset: -3px;
+  --underline-height: 1px;
+  --underline-opacity-hover: 0.6;
+  --underline-opacity-active: 0.9;
+  --underline-scale-rest: 0.8;
+  --underline-dur: 160ms;
 }
 
 /* ========== Base ========== */
@@ -87,6 +92,11 @@ img {
 
 a { color: inherit; }
 
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
 /* ========== Layout helpers ========== */
 .container {
   width: min(var(--container-max), 100% - (var(--gutter) * 2));
@@ -108,10 +118,8 @@ main > .section:first-child {
   padding-top: calc(var(--section-pad) + 12px);
 }
 
-/* ========== Scroll rhythm: avoid double-spacing between sections ========== */
-.section + .section {
-  padding-top: 0; /* only keep the previous section's bottom padding */
-}
+/* Avoid double-spacing between consecutive sections */
+.section + .section { padding-top: 0; }
 
 /* ========== Typography roles ========== */
 .eyebrow {
@@ -162,6 +170,37 @@ main > .section:first-child {
   color: var(--muted);
 }
 
+/* ========== Underline system (single source of truth) ========== */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: var(--underline-offset);
+  width: 100%;
+  height: var(--underline-height);
+  background: currentColor;
+  opacity: 0;
+  transform: scaleX(var(--underline-scale-rest));
+  transition: opacity var(--underline-dur) ease, transform var(--underline-dur) ease;
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  opacity: var(--underline-opacity-hover);
+  transform: scaleX(1);
+}
+
+.link-underline.is-active::after {
+  opacity: var(--underline-opacity-active);
+  transform: scaleX(1);
+  transition: none;
+}
+
 /* ========== Sticky header ========== */
 .site-header {
   position: sticky;
@@ -178,13 +217,10 @@ main > .section:first-child {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-
-  padding-inline: var(--header-gutter); /* full-width header padding */
+  padding-inline: var(--gutter);
 }
 
-
 .site-header__brand {
-  text-decoration: none;
   font-size: var(--fs-caption);
   letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
@@ -197,90 +233,23 @@ main > .section:first-child {
 }
 
 .site-header__nav a {
-  text-decoration: none;
   font-size: var(--fs-caption);
   color: var(--muted);
 }
 
 .site-header__nav a:hover,
-.site-header__nav a:focus-visible {
-  color: var(--text);
-  outline: none;
-}
-
-.site-header__nav a {
-  position: relative;
-  text-decoration: none;
-}
-
+.site-header__nav a:focus-visible,
 .site-header__nav a.is-active {
   color: var(--text);
 }
 
-.site-header__nav a.is-active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 100%;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.8;
+/* focus ring for header links */
+.site-header__nav a:focus-visible,
+.site-header__brand:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 4px;
+  border-radius: 2px;
 }
-
-.site-header__brand {
-  position: relative;
-  text-decoration: none;
-}
-
-/* Keyboard focus cleanup */
-.site-header__brand:focus {
-  outline: none;
-}
-
-
-/* ========== Header link underline system ========== */
-.site-header a {
-  position: relative;
-  text-decoration: none;
-}
-
-/* underline base */
-.site-header a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 100%;
-  height: 1px;
-  background: currentColor;
-  opacity: 0;
-  transform: scaleX(0.8);
-  transition: opacity 160ms ease, transform 160ms ease;
-}
-
-/* ========== Nav polish: active state should feel immediate ========== */
-.site-header a.is-active::after {
-  transition: none; /* no animation on load for the active page */
-  opacity: 0.9;
-  transform: scaleX(1);
-}
-
-
-/* hover + keyboard focus */
-.site-header a:hover::after,
-.site-header a:focus-visible::after {
-  opacity: 0.6;
-  transform: scaleX(1);
-}
-
-/* active (current page) */
-.site-header a.is-active::after {
-  opacity: 0.9;
-  transform: scaleX(1);
-}
-
-
 
 /* ========== Cover grid + cards ========== */
 .cover-grid {
@@ -303,7 +272,6 @@ main > .section:first-child {
   gap: 4px;
 }
 
-/* tighter eyebrow → title relationship inside cards */
 .cover-card .eyebrow { margin-bottom: 2px; }
 .cover-card .title-md { margin-top: 0; }
 
@@ -320,67 +288,14 @@ main > .section:first-child {
   object-fit: cover;
 }
 
-/* Hover only where it makes sense */
 @media (hover: hover) and (pointer: fine) {
   .cover-item img { transition: transform 220ms ease; }
   .cover-card:hover .cover-item img { transform: scale(1.02); }
 }
 
-/* ========== Breakpoints ========== */
-
-/* Tablet & down: avoid awkward in-between widths */
-@media (max-width: 900px) {
-  :root {
-    --container-max: 960px;   /* optional, harmless */
-    --cover-col-gap: 0px;
-    --cover-row-gap: 22px;
-  }
-
-  .cover-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Mobile */
-@media (max-width: 640px) {
-  :root {
-    --columns: 4;
-    --gutter: 20px;
-    --header-h: 56px;
-  }
-
-  .site-header__nav { gap: var(--space-3); }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .cover-item img { transition: none; }
-}
-
-
-/* ========== Extra ========== */
-
-html {
-  overflow-y: scroll;
-  scrollbar-gutter: stable;
-}
-
-.site-header__nav a:focus {
-  outline: none;
-}
-
-.site-header__nav a:focus-visible {
-  outline: 2px solid var(--text);
-  outline-offset: 4px;
-  border-radius: 2px;
-}
-
-
 /* ========== Index ========== */
-/* Index: Browse all work */
 .index-browse {
-  width: min(100% - (var(--page-padding, 24px) * 2), var(--page-max, 1100px));
-  margin: 20px auto 0; /* tight + consistent */
+  margin-top: var(--space-5);
   display: flex;
   justify-content: center;
 }
@@ -392,46 +307,15 @@ html {
   opacity: 0.8;
 }
 
-.index-browse__link:hover {
-  opacity: 1;
-}
-
-
-/* ========== Nav link underline system ========== */
-.site-nav__link {
-  position: relative;
-  text-decoration: none;
-}
-
-.site-nav__link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 100%;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
-}
-
-.site-nav__link:hover::after,
-.site-nav__link:focus-visible::after {
-  transform: scaleX(1);
-}
-
-
-
+.index-browse__link:hover { opacity: 1; }
 
 /* ========== Contact page ========== */
-/* Contact page */
 .contact {
   padding: clamp(32px, 6vw, 72px) 0;
 }
 
 .contact__inner {
-  width: min(100% - (var(--page-padding, 24px) * 2), var(--page-max, 1100px));
+  width: min(var(--container-max), 100% - (var(--gutter) * 2));
   margin: 0 auto;
 }
 
@@ -450,9 +334,7 @@ html {
   opacity: 0.85;
 }
 
-.contact__cta {
-  margin: 0 0 26px;
-}
+.contact__cta { margin: 0 0 26px; }
 
 .contact__email {
   display: inline-block;
@@ -503,4 +385,29 @@ html {
   margin: 0;
   font-size: 14px;
   opacity: 0.65;
+}
+
+/* ========== Breakpoints ========== */
+@media (max-width: 900px) {
+  :root {
+    --container-max: 960px;
+    --cover-col-gap: 0px;
+    --cover-row-gap: 22px;
+  }
+
+  .cover-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --columns: 4;
+    --gutter: 20px;
+    --header-h: 56px;
+  }
+
+  .site-header__nav { gap: var(--space-3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-item img { transition: none; }
 }
