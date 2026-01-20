@@ -46,3 +46,82 @@ body {
   font-size: 18px;
   line-height: 1.5;
 }
+
+
+
+/* ========== Layout System (Grid) ========== */
+
+:root {
+  /* Container */
+  --container-max: 1120px; /* tweak: 1040–1200 depending on your vibe */
+  --gutter: clamp(16px, 4vw, 40px);
+
+  /* Grid */
+  --columns: 12;
+  --col-gap: clamp(12px, 2vw, 24px);
+  --row-gap: clamp(16px, 3vw, 40px);
+}
+
+.container {
+  width: min(var(--container-max), 100% - (var(--gutter) * 2));
+  margin-inline: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  row-gap: var(--row-gap);
+}
+
+/* Helpful utilities */
+.span-12 { grid-column: span 12; }
+.span-8  { grid-column: span 8; }
+.span-6  { grid-column: span 6; }
+.span-4  { grid-column: span 4; }
+.span-3  { grid-column: span 3; }
+
+@media (max-width: 900px) {
+  :root { --container-max: 960px; } /* optional */
+  .span-8 { grid-column: span 12; } /* common collapse */
+}
+
+@media (max-width: 640px) {
+  :root {
+    --columns: 4;
+    --gutter: 20px; /* increased mobile side padding */
+  }
+
+  .span-3,
+  .span-4,
+  .span-6,
+  .span-8 {
+    grid-column: span 4;
+  }
+}
+
+
+/* ========== Cover Section (2x2, 16:9) ========== */
+
+.cover {
+  padding-block: clamp(40px, 6vw, 80px);
+}
+
+.cover-grid {
+  align-items: stretch;
+}
+
+.cover-item {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+}
+
+.cover-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
