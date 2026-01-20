@@ -1,11 +1,66 @@
 /* styles.css */
+
+/* ========== Tokens ========== */
 :root {
+  /* Color */
   --bg: #0b0c10;
   --text: #f5f7ff;
-  --muted: rgba(245, 247, 255, 0.7);
-  --max: 1100px;
+  --muted: rgba(245, 247, 255, 0.72);
+  --surface: rgba(255, 255, 255, 0.06);
+
+  /* Header */
+  --header-h: 64px;
+  --header-bg: rgba(11, 12, 16, 0.72);
+  --header-border: rgba(245, 247, 255, 0.10);
+
+  /* Layout */
+  --container-max: 1200px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --measure: 70ch;
+
+  /* Grid */
+  --columns: 12;
+  --gap: clamp(12px, 2vw, 24px);
+
+  /* Cover grid spacing (component tokens) */
+  --cover-col-gap: 48px;                 /* desktop default */
+  --cover-row-gap: clamp(14px, 2.2vw, 26px);
+
+  /* Radius */
+  --radius: 14px;
+
+  /* Type */
+  --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+  --fs-eyebrow: 12px;
+  --fs-caption: 13px;
+  --fs-body: clamp(16px, 1.2vw, 18px);
+  --fs-body-lg: clamp(18px, 1.6vw, 20px);
+  --fs-h3: clamp(20px, 2vw, 24px);
+  --fs-h2: clamp(28px, 3vw, 40px);
+  --fs-h1: clamp(40px, 6vw, 72px);
+
+  --lh-tight: 1.05;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.65;
+
+  --ls-eyebrow: 0.12em;
+  --ls-tight: -0.02em;
+
+  /* Spacing scale */
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 72px;
+
+  /* Section rhythm */
+  --section-pad: clamp(40px, 6vw, 80px);
 }
 
+/* ========== Base ========== */
 * { box-sizing: border-box; }
 
 html, body {
@@ -16,52 +71,20 @@ html, body {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+  text-rendering: optimizeLegibility;
 }
 
-.page {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 64px 20px;
+img {
+  max-width: 100%;
+  display: block;
 }
 
-.hero .kicker {
-  margin: 0 0 12px;
-  color: var(--muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 12px;
-}
+a { color: inherit; }
 
-.hero h1 {
-  margin: 0 0 12px;
-  font-size: clamp(40px, 6vw, 72px);
-  line-height: 1.02;
-}
-
-.hero .lead {
-  margin: 0;
-  max-width: 50ch;
-  color: var(--muted);
-  font-size: 18px;
-  line-height: 1.5;
-}
-
-
-
-/* ========== Layout System (Grid) ========== */
-
-:root {
-  /* Container */
-  --container-max: 1120px; /* tweak: 1040–1200 depending on your vibe */
-  --gutter: clamp(16px, 4vw, 40px);
-
-  /* Grid */
-  --columns: 12;
-  --col-gap: clamp(12px, 2vw, 24px);
-  --row-gap: clamp(16px, 3vw, 40px);
-}
-
+/* ========== Layout helpers ========== */
 .container {
   width: min(var(--container-max), 100% - (var(--gutter) * 2));
   margin-inline: auto;
@@ -70,58 +93,181 @@ body {
 .grid {
   display: grid;
   grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
-  column-gap: var(--col-gap);
-  row-gap: var(--row-gap);
+  gap: var(--gap);
 }
 
-/* Helpful utilities */
-.span-12 { grid-column: span 12; }
-.span-8  { grid-column: span 8; }
-.span-6  { grid-column: span 6; }
-.span-4  { grid-column: span 4; }
-.span-3  { grid-column: span 3; }
+.measure { max-width: var(--measure); }
+.span { grid-column: span var(--span, 12); }
 
-@media (max-width: 900px) {
-  :root { --container-max: 960px; } /* optional */
-  .span-8 { grid-column: span 12; } /* common collapse */
+.section { padding-block: var(--section-pad); }
+
+main > .section:first-child {
+  padding-top: calc(var(--section-pad) + 12px);
 }
 
-@media (max-width: 640px) {
-  :root {
-    --columns: 4;
-    --gutter: 20px; /* increased mobile side padding */
-  }
-
-  .span-3,
-  .span-4,
-  .span-6,
-  .span-8 {
-    grid-column: span 4;
-  }
+/* ========== Typography roles ========== */
+.eyebrow {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
-
-/* ========== Cover Section (2x2, 16:9) ========== */
-
-.cover {
-  padding-block: clamp(40px, 6vw, 80px);
+.title-xl {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
 }
 
+.title-lg {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h2);
+  line-height: 1.15;
+  letter-spacing: var(--ls-tight);
+}
+
+.title-md {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+}
+
+.body {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+}
+
+.body-lg {
+  margin: 0;
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-relaxed);
+  color: var(--muted);
+}
+
+.caption {
+  margin: 0;
+  font-size: var(--fs-caption);
+  line-height: var(--lh-normal);
+  color: var(--muted);
+}
+
+/* ========== Sticky header ========== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--header-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--header-border);
+}
+
+.site-header__inner {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.site-header__brand {
+  text-decoration: none;
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+}
+
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.site-header__nav a {
+  text-decoration: none;
+  font-size: var(--fs-caption);
+  color: var(--muted);
+}
+
+.site-header__nav a:hover,
+.site-header__nav a:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+/* ========== Cover grid + cards ========== */
 .cover-grid {
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--cover-col-gap);
+  row-gap: var(--cover-row-gap);
 }
+
+.cover-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-decoration: none;
+}
+
+.cover-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* tighter eyebrow → title relationship inside cards */
+.cover-card .eyebrow { margin-bottom: 2px; }
+.cover-card .title-md { margin-top: 0; }
 
 .cover-item {
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 14px;
+  border-radius: var(--radius);
+  background: var(--surface);
 }
 
 .cover-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
+/* Hover only where it makes sense */
+@media (hover: hover) and (pointer: fine) {
+  .cover-item img { transition: transform 220ms ease; }
+  .cover-card:hover .cover-item img { transform: scale(1.02); }
+}
+
+/* ========== Breakpoints ========== */
+
+/* Tablet & down: avoid awkward in-between widths */
+@media (max-width: 900px) {
+  :root {
+    --container-max: 960px;   /* optional, harmless */
+    --cover-col-gap: 0px;
+    --cover-row-gap: 22px;
+  }
+
+  .cover-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  :root {
+    --columns: 4;
+    --gutter: 20px;
+    --header-h: 56px;
+  }
+
+  .site-header__nav { gap: var(--space-3); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cover-item img { transition: none; }
+}
