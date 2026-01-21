@@ -1,4 +1,5 @@
 /* styles.css */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..800&family=DM+Serif+Display&display=swap");
 
 /* ========== Tokens ========== */
 :root {
@@ -30,7 +31,8 @@
   --radius: 14px;
 
   /* Type */
-  --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --font-sans: "Archivo", "Segoe UI", Arial, sans-serif;
+  --font-display: "DM Serif Display", "Times New Roman", serif;
 
   --fs-eyebrow: 12px;
   --fs-caption: 13px;
@@ -83,7 +85,7 @@ body {
   font-size: var(--fs-body);
   line-height: var(--lh-relaxed);
   text-rendering: optimizeLegibility;
-
+}
 
 img {
   max-width: 100%;
@@ -135,6 +137,7 @@ main > .section:first-child {
   font-size: var(--fs-h1);
   line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
+  font-family: var(--font-display);
 }
 
 .title-lg {
@@ -142,12 +145,14 @@ main > .section:first-child {
   font-size: var(--fs-h2);
   line-height: 1.15;
   letter-spacing: var(--ls-tight);
+  font-family: var(--font-display);
 }
 
 .title-md {
   margin: 0 0 var(--space-1);
   font-size: var(--fs-h3);
   line-height: 1.25;
+  font-family: var(--font-display);
 }
 
 .body {
@@ -311,7 +316,12 @@ main > .section:first-child {
 
 /* ========== Contact page ========== */
 .contact {
+  position: relative;
   padding: clamp(32px, 6vw, 72px) 0;
+  background:
+    radial-gradient(900px 400px at 10% 20%, rgba(255, 196, 102, 0.14), transparent 70%),
+    radial-gradient(700px 420px at 85% 10%, rgba(80, 196, 212, 0.16), transparent 65%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.04), transparent 60%);
 }
 
 .contact__inner {
@@ -319,26 +329,94 @@ main > .section:first-child {
   margin: 0 auto;
 }
 
+.contact__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(24px, 6vw, 72px);
+  align-items: start;
+}
+
+.contact__intro {
+  display: grid;
+  gap: var(--space-4);
+  animation: contact-rise 600ms ease both;
+}
+
+.contact__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 12px;
+  color: var(--muted);
+}
+
 .contact__title {
   font-size: clamp(32px, 4vw, 52px);
   line-height: 1.05;
   letter-spacing: -0.02em;
   margin: 0 0 14px;
+  font-family: var(--font-display);
 }
 
 .contact__lead {
   font-size: clamp(16px, 1.6vw, 20px);
   line-height: 1.5;
   max-width: 60ch;
-  margin: 0 0 28px;
+  margin: 0;
   opacity: 0.85;
 }
 
-.contact__cta { margin: 0 0 26px; }
+.contact__details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.contact__details div {
+  padding: var(--space-2) var(--space-3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.contact__label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.contact__value {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.contact__card {
+  padding: clamp(20px, 4vw, 32px);
+  border-radius: 18px;
+  background: rgba(9, 10, 14, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  display: grid;
+  gap: var(--space-3);
+  animation: contact-rise 700ms ease both;
+  animation-delay: 80ms;
+}
+
+.contact__card-title {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 
 .contact__email {
   display: inline-block;
-  font-size: clamp(18px, 2vw, 24px);
+  font-size: clamp(20px, 2.4vw, 26px);
   line-height: 1.2;
   text-decoration: none;
   padding-bottom: 6px;
@@ -352,27 +430,58 @@ main > .section:first-child {
 }
 
 .contact__hint {
-  margin: 10px 0 0;
+  margin: 0;
   font-size: 14px;
   opacity: 0.7;
+}
+
+.contact__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  background: #f6f0e5;
+  color: #171717;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.contact__button:hover,
+.contact__button:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(246, 240, 229, 0.2);
+}
+
+.contact__button:focus-visible {
+  outline: 2px solid #f6f0e5;
+  outline-offset: 3px;
 }
 
 .contact__meta {
   display: flex;
   flex-wrap: wrap;
   gap: 12px 18px;
-  margin: 0 0 28px;
+  margin: 0;
 }
 
 .contact__link {
   text-decoration: none;
-  opacity: 0.85;
-  padding-bottom: 4px;
-  border-bottom: 1px solid transparent;
+  opacity: 0.9;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .contact__link:hover {
-  border-bottom-color: currentColor;
+  border-color: rgba(255, 255, 255, 0.5);
   opacity: 1;
 }
 
@@ -387,6 +496,17 @@ main > .section:first-child {
   opacity: 0.65;
 }
 
+@keyframes contact-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ========== Breakpoints ========== */
 @media (max-width: 900px) {
   :root {
@@ -396,6 +516,14 @@ main > .section:first-child {
   }
 
   .cover-grid { grid-template-columns: 1fr; }
+
+  .contact__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact__card {
+    order: 2;
+  }
 }
 
 @media (max-width: 640px) {
@@ -410,6 +538,10 @@ main > .section:first-child {
 
 @media (prefers-reduced-motion: reduce) {
   .cover-item img { transition: none; }
+  .contact__intro,
+  .contact__card {
+    animation: none;
+  }
 }
 
 
@@ -532,3 +664,27 @@ main > .section:first-child {
   transform: scale(0.99);
 }
 
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+/* Left column */
+.about-media {
+  position: sticky;
+  top: clamp(6rem, 12vh, 8rem);
+}
+
+.about-image-placeholder {
+  aspect-ratio: 3 / 4;
+  background: #f2f2f2;
+  border-radius: 12px;
+}
+
+/* Right column */
+.about-content {
+  max-width: 60ch;
+}
